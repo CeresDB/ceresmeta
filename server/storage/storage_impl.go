@@ -6,7 +6,7 @@ import (
 	"context"
 	"math"
 
-	"github.com/CeresDB/ceresdbproto/pkg/metapb"
+	"github.com/CeresDB/ceresdbproto/pkg/clusterpb"
 	"github.com/CeresDB/ceresmeta/pkg/log"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"go.uber.org/zap"
@@ -44,24 +44,40 @@ func newEtcdStorage(client *clientv3.Client, rootPath string, opts Options) *Met
 		NewEtcdKV(client, rootPath), opts)
 }
 
-func (s *MetaStorageImpl) GetCluster(ctx context.Context, clusterID uint32) (*metapb.Cluster, error) {
+func (s *MetaStorageImpl) ListClusters(ctx context.Context) ([]*clusterpb.Cluster, error) {
 	return nil, nil
 }
 
-func (s *MetaStorageImpl) PutCluster(ctx context.Context, clusterID uint32, meta *metapb.Cluster) error {
-	return nil
-}
-
-func (s *MetaStorageImpl) GetClusterTopology(ctx context.Context, clusterID uint32) (*metapb.ClusterTopology, error) {
+func (s *MetaStorageImpl) CreateCluster(ctx context.Context, cluster *clusterpb.Cluster) (*clusterpb.Cluster, error) {
 	return nil, nil
 }
 
-func (s *MetaStorageImpl) PutClusterTopology(ctx context.Context, clusterID uint32, clusterMetaData *metapb.ClusterTopology) error {
+func (s *MetaStorageImpl) GetCluster(ctx context.Context, clusterID uint32) (*clusterpb.Cluster, error) {
+	return nil, nil
+}
+
+func (s *MetaStorageImpl) PutCluster(ctx context.Context, clusterID uint32, meta *clusterpb.Cluster) error {
 	return nil
 }
 
-func (s *MetaStorageImpl) ListSchemas(ctx context.Context, clusterID uint32) ([]*metapb.Schema, error) {
-	schemas := make([]*metapb.Schema, 0)
+func (s *MetaStorageImpl) CreateClusterTopology(ctx context.Context, clusterTopology *clusterpb.ClusterTopology) error {
+	return nil
+}
+
+func (s *MetaStorageImpl) GetClusterTopology(ctx context.Context, clusterID uint32) (*clusterpb.ClusterTopology, error) {
+	return nil, nil
+}
+
+func (s *MetaStorageImpl) PutClusterTopology(ctx context.Context, clusterID uint32, clusterMetaData *clusterpb.ClusterTopology) error {
+	return nil
+}
+
+func (s *MetaStorageImpl) CreateSchema(ctx context.Context, clusterID uint32, schema *clusterpb.Schema) error {
+	return nil
+}
+
+func (s *MetaStorageImpl) ListSchemas(ctx context.Context, clusterID uint32) ([]*clusterpb.Schema, error) {
+	schemas := make([]*clusterpb.Schema, 0)
 	nextID := uint32(0)
 	endKey := makeSchemaKey(clusterID, math.MaxUint32)
 
@@ -82,7 +98,7 @@ func (s *MetaStorageImpl) ListSchemas(ctx context.Context, clusterID uint32) ([]
 		}
 
 		for _, r := range res {
-			schema := &metapb.Schema{}
+			schema := &clusterpb.Schema{}
 			if err := proto.Unmarshal([]byte(r), schema); err != nil {
 				return nil, ErrMetaGetSchemas.WithCausef("proto parse err:%v", err)
 			}
@@ -100,15 +116,23 @@ func (s *MetaStorageImpl) ListSchemas(ctx context.Context, clusterID uint32) ([]
 	}
 }
 
-func (s *MetaStorageImpl) PutSchemas(ctx context.Context, clusterID uint32, schemas []*metapb.Schema) error {
+func (s *MetaStorageImpl) PutSchemas(ctx context.Context, clusterID uint32, schemas []*clusterpb.Schema) error {
 	return nil
 }
 
-func (s *MetaStorageImpl) ListTables(ctx context.Context, clusterID uint32, schemaID uint32, tableID []uint64) ([]*metapb.Table, error) {
+func (s *MetaStorageImpl) CreateTable(ctx context.Context, clusterID uint32, schemaID uint32, table *clusterpb.Table) error {
+	return nil
+}
+
+func (s *MetaStorageImpl) GetTable(ctx context.Context, clusterID uint32, schemaID uint32, tableName string) (*clusterpb.Table, bool, error) {
+	return nil, false, nil
+}
+
+func (s *MetaStorageImpl) ListTables(ctx context.Context, clusterID uint32, schemaID uint32) ([]*clusterpb.Table, error) {
 	return nil, nil
 }
 
-func (s *MetaStorageImpl) PutTables(ctx context.Context, clusterID uint32, schemaID uint32, tables []*metapb.Table) error {
+func (s *MetaStorageImpl) PutTables(ctx context.Context, clusterID uint32, schemaID uint32, tables []*clusterpb.Table) error {
 	return nil
 }
 
@@ -116,18 +140,22 @@ func (s *MetaStorageImpl) DeleteTables(ctx context.Context, clusterID uint32, sc
 	return nil
 }
 
-func (s *MetaStorageImpl) ListShardTopologies(ctx context.Context, clusterID uint32, shardID []uint32) ([]*metapb.ShardTopology, error) {
+func (s *MetaStorageImpl) ListShardTopologies(ctx context.Context, clusterID uint32, shardID []uint32) ([]*clusterpb.ShardTopology, error) {
 	return nil, nil
 }
 
-func (s *MetaStorageImpl) PutShardTopologies(ctx context.Context, clusterID uint32, shardID []uint32, shardTableInfo []*metapb.ShardTopology) error {
+func (s *MetaStorageImpl) PutShardTopologies(ctx context.Context, clusterID uint32, shardID []uint32, shardTableInfo []*clusterpb.ShardTopology) error {
 	return nil
 }
 
-func (s *MetaStorageImpl) ListNodes(ctx context.Context, clusterID uint32) ([]*metapb.Node, error) {
+func (s *MetaStorageImpl) ListNodes(ctx context.Context, clusterID uint32) ([]*clusterpb.Node, error) {
 	return nil, nil
 }
 
-func (s *MetaStorageImpl) PutNodes(ctx context.Context, clusterID uint32, node []*metapb.Node) error {
+func (s *MetaStorageImpl) PutNodes(ctx context.Context, clusterID uint32, node []*clusterpb.Node) error {
 	return nil
+}
+
+func (s *MetaStorageImpl) CreateOrUpdateNode(ctx context.Context, clusterID uint32, node *clusterpb.Node) (*clusterpb.Node, error) {
+	return nil, nil
 }

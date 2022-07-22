@@ -12,7 +12,7 @@ const (
 	schema  = "schema"
 )
 
-// makeSchemaKey returns the schema meta info key path with the given region ID.
+// makeSchemaKey returns the key path to the schema meta info.
 // example:
 // cluster 1: v1/cluster/1/schema/1 -> ceresmeta.Schema
 //            v1/cluster/1/schema/2 -> ceresmeta.Schema
